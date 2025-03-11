@@ -40,16 +40,21 @@ export async function getStaticProps({ params }) {
   const response = await fetch(url, options);
   const data = await response.json();
 
-  const trailerResponse = await fetch(`https://api.themoviedb.org/3/movie/${params.movieId}/videos`, options);
+  const trailerResponse = await fetch(
+    `https://api.themoviedb.org/3/movie/${params.movieId}/videos`,
+    options,
+  );
   const trailerData = await trailerResponse.json();
 
   return {
-    props: { data, trailerData},
+    props: { data, trailerData },
     revalidate: 60,
   };
 }
 
-export default function Movie({data, trailerData}) {
-  return <DetailPage media={data} type={'movie'} trailerUrl = {'https://www.youtube.com/embed/' + trailerData.results[0].key}/>;
-}
+export default function Movie({ data, trailerData }) {
+  const trailerKey = trailerData?.results?.length > 0 ? trailerData.results[0].key : null;
+  const trailerUrl = trailerKey ? `https://www.youtube.com/embed/${trailerKey}` : null;
 
+  return <DetailPage media={data} type='movie' trailerUrl={trailerUrl} />;
+}
