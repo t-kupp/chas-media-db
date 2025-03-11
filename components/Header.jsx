@@ -23,7 +23,7 @@ export default function Header() {
               </span>
             </Link>
             <div className='link-hover link'>
-              <Link href={'/movie'}>Movies</Link>
+              <Link href={'/'}>Movies</Link>
             </div>
             <div className='link-hover link'>
               <Link href={'/tv'}>TV Shows</Link>

@@ -1,29 +1,37 @@
-import Link from 'next/link';
+import MediaCard from '@/components/MediaCard';
 
-export default function Home() {
+export default function Home({ popularMovies }) {
+  console.log('popularMovies:', popularMovies);
+
   return (
-    <div className='mx-auto flex w-1/2 max-w-7xl flex-col items-center p-8 text-center text-2xl'>
-      <h1 className='mb-12 mt-20 text-4xl font-semibold'>Welcome to Amazon's Movie Site!</h1>
-      <p className='text align-centre flex'>
-        Welcome to Your Ultimate Movie & Series Guide! 🎬✨ Find details on the most popular films
-        and TV shows. Search, explore, and get inspired—your next favorite watch is just a click
-        away!{' '}
-      </p>
-      <div className='mt-8 flex flex-col items-center gap-4'>
-        <img
-          src='./hollywood-historia.jpg'
-          alt='film image with a lion'
-          className='w-full max-w-3xl'
-        />
-        <div className='m-6 flex items-center gap-4 px-6 py-6'>
-          <Link href={'/movie'}>
-            <button className='btn btn-accent rounded-xl'>Movies</button>
-          </Link>
-          <Link href={'/tv'}>
-            <button className='btn btn-accent rounded-xl'>TV Shows</button>
-          </Link>
+    <div className='p-8'>
+      <div className='mx-auto max-w-7xl'>
+        <h1 className='mb-8 text-2xl font-semibold'>Popular Movies</h1>
+        <div className='grid grid-cols-2 justify-center gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
+          {popularMovies.map((movie, index) => (
+            <MediaCard key={index} media={movie} type={'movie'} />
+          ))}
         </div>
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
+  const APIKey = process.env.NEXT_PUBLIC_API_KEY;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${APIKey}`,
+    },
+  };
+
+  const response = await fetch(url, options);
+  const data = await response.json();
+
+  return {
+    props: { popularMovies: data.results || [] },
+  };
 }
