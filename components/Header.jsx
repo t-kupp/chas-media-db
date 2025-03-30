@@ -47,7 +47,7 @@ export default function Header() {
             <Link href={'/'}>
               <span className='link-hover link py-2'>Home</span>
             </Link>
-            <Link href={'/movie'}>
+            <Link href={'/'}>
               <span className='link-hover link py-2'>Movies</span>
             </Link>
             <Link href={'/tv'}>
